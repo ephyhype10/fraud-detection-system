@@ -1,6 +1,7 @@
 from hash_table import HashTable
 from velocity_check import VelocityChecker
 from graph import Graph
+from avl_tree import AVLTree
 
 
 class FraudDetector:
@@ -30,6 +31,7 @@ class FraudDetector:
         self.velocity_checker = VelocityChecker(limit=3, window_seconds=300)
         self.device_graph = Graph()
         self.transfer_graph = Graph()
+        self.amount_tree = AVLTree()
 
         self.all_transactions = []
         self.flagged_transactions = []
@@ -54,6 +56,7 @@ class FraudDetector:
 
         # store into history AFTER checks, so "average" reflects PAST behaviour, not this txn
         self.user_history.insert(transaction.user_id, transaction)
+        self.amount_tree.insert(transaction)
         self.all_transactions.append(transaction)
 
         if transaction.is_flagged():
