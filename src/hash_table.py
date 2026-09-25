@@ -11,11 +11,13 @@ class HashTable:
         self.item_count = 0
 
     def _hash(self, key):
-        """Simple, explainable hash function: sum of char codes, mod table size."""
-        total = 0
+        """Polynomial rolling hash - spreads similar keys (like 'U1', 'U10', 'U100')
+        across the table much better than a simple character sum."""
+        hash_value = 0
+        prime = 31
         for ch in str(key):
-            total += ord(ch)
-        return total % self.size
+            hash_value = (hash_value * prime + ord(ch)) % self.size
+        return hash_value
 
     def insert(self, key, value):
         """
