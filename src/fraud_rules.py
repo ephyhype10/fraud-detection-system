@@ -33,7 +33,7 @@ class FraudDetector:
         self.device_graph = Graph()
         self.transfer_graph = Graph()
         self.amount_tree = AVLTree()
-
+        self.user_ids = set()
         self.all_transactions = []
         self.flagged_transactions = []
 
@@ -51,6 +51,7 @@ class FraudDetector:
         self._check_amount_spike(transaction)
         self._check_velocity(transaction)
         self._check_location_jump(transaction)
+        self.user_ids.add(transaction.user_id)
 
         # record into graphs for later ring/cycle detection
         self.device_graph.add_edge(transaction.user_id, transaction.device_id, directed=False)
@@ -112,7 +113,13 @@ class FraudDetector:
         return self.flagged_transactions
 
     def get_fraud_rings(self):
-        return self.device_graph.find_all_clusters()
+        rings = []
+        for cluster in self.device_graph.find_all_clusters():
+            users = [n for n in cluster if n in self.user_ids]
+            if len(users) >= 2:          # a ring needs at least 2 users
+                rings.append(users)
+        return rings
+
     def has_money_loop(self):
         return self.transfer_graph.has_cycle_directed()
 
