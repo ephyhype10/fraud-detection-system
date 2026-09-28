@@ -1,4 +1,5 @@
 from hash_table import HashTable
+from src import transaction
 from velocity_check import VelocityChecker
 from graph import Graph
 from avl_tree import AVLTree
@@ -53,6 +54,8 @@ class FraudDetector:
 
         # record into graphs for later ring/cycle detection
         self.device_graph.add_edge(transaction.user_id, transaction.device_id, directed=False)
+        if transaction.recipient:
+            self.transfer_graph.add_edge(transaction.user_id, transaction.recipient, directed=True)
 
         # store into history AFTER checks, so "average" reflects PAST behaviour, not this txn
         self.user_history.insert(transaction.user_id, transaction)
@@ -110,6 +113,8 @@ class FraudDetector:
 
     def get_fraud_rings(self):
         return self.device_graph.find_all_clusters()
+    def has_money_loop(self):
+        return self.transfer_graph.has_cycle_directed()
 
 
 if __name__ == "__main__":

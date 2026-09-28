@@ -1,4 +1,4 @@
-txn_id,user_id,amount,timestamp,location,device_id,merchant
+txn_id,user_id,amount,timestamp,location,device_id,merchant,recipient
 T001,U001,4500,2025-01-15T09:00:00,Chennai,D01,Amazon
 T002,U001,4800,2025-01-15T09:05:00,Chennai,D01,Swiggy
 T003,U001,5200,2025-01-15T09:20:00,Chennai,D01,Zomato
@@ -34,3 +34,6 @@ T032,U015,5000,2025-01-15T10:40:00,Delhi,D16,Croma
 T033,U016,6000,2025-01-15T10:45:00,Mumbai,D17,Flipkart
 T034,U017,3700,2025-01-15T10:50:00,Pune,D18,Amazon
 T035,U018,2800,2025-01-15T10:55:00,Hyderabad,D19,Swiggy
+T036,U003,8000,2025-01-15T11:10:00,Mumbai,D03,Transfer,U004
+T037,U004,7900,2025-01-15T11:20:00,Delhi,D04,Transfer,U005
+T038,U005,7800,2025-01-15T11:30:00,Pune,D05,Transfer,U003

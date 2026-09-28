@@ -22,6 +22,7 @@ def load_transactions_from_csv(filepath):
                 location=row["location"],
                 device_id=row["device_id"],
                 merchant=row["merchant"],
+                recipient=row.get("recipient") or None
             )
             transactions.append(txn)
     return transactions

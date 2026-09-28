@@ -15,7 +15,7 @@ class Transaction:
         merchant (str): Merchant/vendor name
     """
 
-    def __init__(self, txn_id, user_id, amount, timestamp, location, device_id, merchant):
+    def __init__(self, txn_id, user_id, amount, timestamp, location, device_id, merchant, recipient=None):
         self.txn_id = txn_id
         self.user_id = user_id
         self.amount = float(amount)
@@ -23,6 +23,7 @@ class Transaction:
         self.location = location
         self.device_id = device_id
         self.merchant = merchant
+        self.recipient = recipient     
 
         # filled in later by fraud_rules.py
         self.risk_score = 0

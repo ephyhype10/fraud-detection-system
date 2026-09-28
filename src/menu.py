@@ -16,7 +16,9 @@ def run_menu(detector):
         print("3. Show top K riskiest transactions")
         print("4. Show suspicious device-sharing clusters (fraud rings)")
         print("5. Search transaction by amount range (AVL tree)")
-        print("6. Exit")
+        print("6. Detect money-transfer loops")
+        print("7. Exit")
+
 
         choice = input("\nEnter your choice: ").strip()
 
@@ -31,6 +33,8 @@ def run_menu(detector):
         elif choice == "5":
             _search_by_range(detector)
         elif choice == "6":
+            _show_money_loops(detector)
+        elif choice == "7":
             print("Exiting. Goodbye!")
             break
         else:
@@ -42,6 +46,11 @@ def _show_all(detector):
     for t in detector.all_transactions:
         print(f"  {t.txn_id} | user={t.user_id} | amount={t.amount} | risk={t.risk_score}")
 
+def _show_money_loops(detector):
+    if detector.has_money_loop():
+        print("\nALERT: Circular money transfer detected (money returns to its origin).")
+    else:
+        print("\nNo circular transfers found.")
 
 def _show_flagged(detector):
     flagged = detector.get_flagged()
