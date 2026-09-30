@@ -12,11 +12,10 @@ def run_menu(detector):
         print("=" * 50)
         print("1. Show all transactions")
         print("2. Show flagged transactions (ranked by risk)")
-        print("3. Show top K riskiest transactions")
-        print("4. Show suspicious device-sharing clusters (fraud rings)")
-        print("5. Search transaction by amount range (AVL tree)")
-        print("6. Detect money-transfer loops")
-        print("7. Exit")
+        print("3. Show suspicious device-sharing clusters (fraud rings)")
+        print("4. Search transaction by amount range (AVL tree)")
+        print("5. Detect money-transfer loops")
+        print("6. Exit")
 
 
         choice = input("\nEnter your choice: ").strip()
@@ -26,14 +25,12 @@ def run_menu(detector):
         elif choice == "2":
             _show_flagged(detector)
         elif choice == "3":
-            _show_top_k(detector)
-        elif choice == "4":
             _show_fraud_rings(detector)
-        elif choice == "5":
+        elif choice == "4":
             _search_by_range(detector)
-        elif choice == "6":
+        elif choice == "5":
             _show_money_loops(detector)
-        elif choice == "7":
+        elif choice == "6":
             print("Exiting. Goodbye!")
             break
         else:
