@@ -1,5 +1,4 @@
 from sorting_search import merge_sort
-from heap import RiskHeap
 
 
 def run_menu(detector):
@@ -64,28 +63,6 @@ def _show_flagged(detector):
     for t in ranked:
         print(f"  {t.txn_id} | user={t.user_id} | amount={t.amount} | "
               f"risk={t.risk_score} | flags={t.flags}")
-
-
-def _show_top_k(detector):
-    flagged = detector.get_flagged()
-    if not flagged:
-        print("\nNo flagged transactions to rank.")
-        return
-
-    try:
-        k = int(input("How many top risky transactions to show? "))
-    except ValueError:
-        print("Please enter a valid number.")
-        return
-
-    risk_heap = RiskHeap()
-    for t in flagged:
-        risk_heap.push(t)
-
-    print(f"\nTop {k} riskiest transactions:")
-    for t in risk_heap.top_k(k):
-        print(f"  {t.txn_id} | user={t.user_id} | risk={t.risk_score} | flags={t.flags}")
-
 
 def _show_fraud_rings(detector):
     rings = detector.get_fraud_rings()

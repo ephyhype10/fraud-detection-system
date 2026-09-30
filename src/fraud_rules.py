@@ -1,6 +1,5 @@
 from hash_table import HashTable
 from src import transaction
-from velocity_check import VelocityChecker
 from graph import Graph
 from avl_tree import AVLTree
 
@@ -19,7 +18,6 @@ class FraudDetector:
     WEIGHT_BLACKLIST = 50
     WEIGHT_HIGH_AMOUNT = 25
     WEIGHT_SPIKE = 20
-    WEIGHT_VELOCITY = 30
     WEIGHT_LOCATION_JUMP = 15
 
     FLAG_THRESHOLD = 50
@@ -49,7 +47,6 @@ class FraudDetector:
         self._check_blacklist(transaction)
         self._check_high_amount(transaction)
         self._check_amount_spike(transaction)
-        self._check_velocity(transaction)
         self._check_location_jump(transaction)
         self.user_ids.add(transaction.user_id)
 
@@ -89,11 +86,6 @@ class FraudDetector:
         if avg > 0 and txn.amount > avg * self.SPIKE_MULTIPLIER:
             txn.risk_score += self.WEIGHT_SPIKE
             txn.flags.append("amount_spike")
-
-    def _check_velocity(self, txn):
-        if self.velocity_checker.check(txn.user_id, txn.timestamp):
-            txn.risk_score += self.WEIGHT_VELOCITY
-            txn.flags.append("high_velocity")
 
     def _check_location_jump(self, txn):
         history = self.user_history.get(txn.user_id)
