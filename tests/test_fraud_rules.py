@@ -52,12 +52,6 @@ class TestFraudDetector(unittest.TestCase):
         t = d.process(make_txn("T1", "U1", 90000))
         self.assertNotIn("amount_spike", t.flags)
 
-    def test_velocity(self):
-        d = FraudDetector()
-        results = [d.process(make_txn(f"T{i}", "U1", 1000, minutes=i)) for i in range(4)]
-        self.assertNotIn("high_velocity", results[2].flags)   # 3rd is at the limit
-        self.assertIn("high_velocity", results[3].flags)      # 4th exceeds it
-
     def test_location_jump(self):
         d = FraudDetector()
         d.process(make_txn("T1", "U1", 1000, minutes=0, location="Chennai"))

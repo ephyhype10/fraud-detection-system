@@ -1,5 +1,4 @@
 from hash_table import HashTable
-from src import transaction
 from graph import Graph
 from avl_tree import AVLTree
 
@@ -8,7 +7,7 @@ class FraudDetector:
     """
     Central fraud detection engine. Ties together:
       - HashTable: user transaction history + blacklist
-      - VelocityChecker: rapid-fire transaction detection
+      - AVLTree: transactions indexed by amount
       - Graph: shared-device / money-transfer relationships
 
     Runs a set of weighted rules on each transaction and computes a risk_score.
@@ -27,7 +26,6 @@ class FraudDetector:
     def __init__(self):
         self.user_history = HashTable(size=101)
         self.blacklist = HashTable(size=101)
-        self.velocity_checker = VelocityChecker(limit=3, window_seconds=300)
         self.device_graph = Graph()
         self.transfer_graph = Graph()
         self.amount_tree = AVLTree()
