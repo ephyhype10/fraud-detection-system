@@ -70,12 +70,10 @@ def generate_random_transactions(n):
         amount = random.randint(100, 500000)
         t = Transaction(
             txn_id=f"T{i}",
-            user_id=f"U{i % 1000}",       # 1000 distinct users, reused
+            sender=f"U{i % 1000}",
+            receiver=f"U{(i + 1) % 1000}",
             amount=amount,
             timestamp="2025-01-15T10:00:00",
-            location="City",
-            device_id=f"D{i % 500}",
-            merchant="Merchant",
         )
         transactions.append(t)
     return transactions
@@ -88,16 +86,13 @@ def generate_sorted_transactions(n):
     for i in range(n):
         t = Transaction(
             txn_id=f"T{i}",
-            user_id=f"U{i}",
-            amount=i * 10,          # 0, 10, 20, 30... always increasing
+            sender=f"U{i}",
+            receiver=f"U{i+1}",
+            amount=i * 10,
             timestamp="2025-01-15T10:00:00",
-            location="City",
-            device_id=f"D{i}",
-            merchant="Merchant",
         )
         transactions.append(t)
     return transactions
-
 
 # ---------- Benchmark 1: Linear vs Binary Search ----------
 
