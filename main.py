@@ -3,10 +3,9 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
-from fraud_rules import FraudDetector
-from menu import run_menu
 import csv
 from transaction import Transaction
+from fraud_detection import FraudDetector
 
 
 def load_transactions_from_csv(filepath):
@@ -16,13 +15,10 @@ def load_transactions_from_csv(filepath):
         for row in reader:
             txn = Transaction(
                 txn_id=row["txn_id"],
-                user_id=row["user_id"],
+                sender=row["sender"],
+                receiver=row["receiver"],
                 amount=row["amount"],
                 timestamp=row["timestamp"],
-                location=row["location"],
-                device_id=row["device_id"],
-                merchant=row["merchant"],
-                recipient=row.get("recipient") or None
             )
             transactions.append(txn)
     return transactions
@@ -30,20 +26,37 @@ def load_transactions_from_csv(filepath):
 
 def main():
     detector = FraudDetector()
-
-    # manually planted blacklist entries
     detector.add_to_blacklist("U999")
 
     print("Loading transactions...")
     transactions = load_transactions_from_csv("data/transactions.csv")
 
-    print(f"Processing {len(transactions)} transactions through fraud rules...")
+    print(f"Processing {len(transactions)} transactions...")
     for txn in transactions:
         detector.process(txn)
 
     print(f"Done. {len(detector.get_flagged())} transaction(s) flagged.\n")
 
-    run_menu(detector)
+    print("--- Flagged transactions ---")
+    for t in detector.get_flagged():
+        print(" ", t)
+
+    print("\n--- Connected user groups ---")
+    for group in detector.get_connected_groups():
+        print(" ", group)
+
+    print("\n--- Money loop check ---")
+    if detector.has_money_loop():
+        print("ALERT: circular transfer detected:", detector.get_money_loop())
+    else:
+        print("No circular transfers found.")
+
+    print("\n--- Shortest chain example: U001 -> U005 ---")
+    path, total = detector.find_chain("U001", "U005")
+    if path:
+        print("Path:", path, "| Total amount:", total)
+    else:
+        print("No path found between U001 and U005.")
 
 
 if __name__ == "__main__":

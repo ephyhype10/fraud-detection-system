@@ -9,46 +9,31 @@ from graph import Graph
 
 class TestGraph(unittest.TestCase):
 
-    def test_bfs_finds_connected_cluster(self):
+    def test_add_edge_creates_nodes(self):
         g = Graph()
         g.add_edge("A", "B")
-        g.add_edge("B", "C")
-        g.add_edge("D", "E")
-        self.assertEqual(sorted(g.bfs_cluster("A")), ["A", "B", "C"])
+        self.assertIn("A", g.nodes)
+        self.assertIn("B", g.nodes)
 
-    def test_bfs_unknown_user(self):
-        g = Graph()
-        self.assertEqual(g.bfs_cluster("ghost"), [])
-
-    def test_find_all_clusters_ignores_lone_nodes(self):
+    def test_neighbors(self):
         g = Graph()
         g.add_edge("A", "B")
-        g.add_edge("C", "D")
-        g.add_node("Z")   # isolated
-        clusters = g.find_all_clusters()
-        self.assertEqual(len(clusters), 2)
+        g.add_edge("A", "C")
+        self.assertEqual(g.neighbors("A"), {"B", "C"})
 
-    def test_cycle_detected(self):
+    def test_weight_stored(self):
         g = Graph()
-        g.add_edge("A", "B", directed=True)
-        g.add_edge("B", "C", directed=True)
-        g.add_edge("C", "A", directed=True)
-        self.assertTrue(g.has_cycle_directed())
+        g.add_edge("A", "B", weight=5000)
+        self.assertEqual(g.get_weight("A", "B"), 5000)
 
-    def test_no_cycle_in_chain(self):
-        g = Graph()
-        g.add_edge("X", "Y", directed=True)
-        g.add_edge("Y", "Z", directed=True)
-        self.assertFalse(g.has_cycle_directed())
-
-    def test_adjacency_matrix_undirected(self):
+    def test_weight_none_if_not_set(self):
         g = Graph()
         g.add_edge("A", "B")
-        self.assertEqual(g.get_adjacency_matrix(), [[0, 1], [1, 0]])
+        self.assertIsNone(g.get_weight("A", "B"))
 
     def test_adjacency_matrix_directed(self):
         g = Graph()
-        g.add_edge("A", "B", directed=True)
+        g.add_edge("A", "B")
         self.assertEqual(g.get_adjacency_matrix(), [[0, 1], [0, 0]])
 
 

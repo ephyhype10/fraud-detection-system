@@ -10,8 +10,7 @@ from avl_tree import AVLTree
 
 
 def make_txn(amount, i=0):
-    return Transaction(f"T{i}", f"U{i}", amount, "2025-01-15T10:00:00", "City", "D1", "M")
-
+    return Transaction(f"T{i}", f"U{i}", f"U{i+1}", amount, "2025-01-15T10:00:00")
 
 class TestAVLTree(unittest.TestCase):
 
